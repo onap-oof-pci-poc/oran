@@ -1,0 +1,57 @@
+module oofpcipoc-api {
+    yang-version "1.1";
+    namespace "org:onap:ccsdk";
+    prefix "oofpcipoc-api";
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import oofpcipoc {
+    prefix oofpcipoc;
+    revision-date "2018-11-27";
+  }
+
+  organization
+    "ONAP";
+  contact
+    "WG Web: <https://www.opennetworking.org/technical-communities/areas/specification/1931-optical-transport>
+     WG List:  <mailto:wireless-transport@login.opennetworking.org>
+     WG Chair: Lyndon Ong         <mailto:lyong@ciena.com>
+     WG Chair: Giorgio Cazzaniga  <mailto:giorgio.cazzaniga@sm-optics.com>
+     Editors:  Ramakrishnan, Shanthakumar (Shanth) <Shanthakumar.Ramakrishnan@commscope.com> Martin Skorupski   <mailto:martin.skorupski@highstreet-technologies.com>";
+  description
+    "This module contains a collection of YANG definitions for managing radio access network (RAN) devices.";
+
+  revision 2018-11-27 {
+    description
+      "oofpcipoc api definition ";
+  }
+
+
+  rpc greeting {
+  input {
+    leaf salutation {
+      type string;
+    }
+  }
+  output {
+    leaf response {
+      type string;
+      }
+    }
+  }
+
+  rpc configuration-phy-cell-id {
+    input {
+      uses oofpcipoc:configuration-phy-cell-id-request;
+    }
+    output {
+      uses oofpcipoc:configuration-phy-cell-id-response;
+    }
+  }
+
+}
