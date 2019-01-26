@@ -1,260 +1,296 @@
 module o-ran-onap-optimization-framework-physical-cell-identifier {
-  yang-version 1.1;
-  namespace "o:ran:onap:optimization:framework:physical:cell:identifier";
-  prefix oofpci;
+    yang-version 1.1;
+    namespace "o:ran:onap:optimization:framework:physical:cell:identifier";
+    prefix oofpci;
 
-  organization
-    "O-RAN Alliance - WG6: Cloudification and orchestration";
-  contact
-    "WG Web: <https://www.o-ran.org>
-     WG List:  <mailto:contact@o-ran.org>";
-  description
-    "This module contains a collection of YANG definitions for managing radio access network (RAN) devices.";
-
-  revision 2019-01-19 {
+    organization
+      "O-RAN Alliance - WG6: Cloudification and orchestration";
+    contact
+      "WG Web: <https://www.o-ran.org>
+       WG List:  <mailto:contact@o-ran.org>";
     description
-      "Formal updates including renaming the module.";
-    reference
-      "O-RAN TR ???: A YANG Data Model for Radio Access Networks.
-       ONF TR 512: Common Information Model (CoreModel).
-       BBF TR-196 2.0.3 full";
-  }
-  revision 2018-11-27 {
-    description
-      "Updated and to be used only for ONAP PCI Optimization PoC 2018-09-20
-       Incorporated container for fap-service and added pnf-name leaf node
-       For respective nodes, changed min-elements from 1 to 0 make them optional";
-    reference
-      "ONF TR ???: A YANG Data Model for Radio Access Networks.
-       BBF TR-196 2.0.3 full";
-  }
-  revision 2018-04-08 {
-    description
-      "Initial version, used only for ONAP PoC 2018-06-25";
-    reference
-      "ONF TR ???: A YANG Data Model for Radio Access Networks.
-       BBF TR-196 2.0.3 full";
-  }
+      "This module contains a collection of YANG definitions for managing radio access network (RAN) devices.";
 
-  rpc greeting {
-    description "none";
-    input {
-      leaf salutation {
-        type string;
-        description "none";
-      }
-    }
-    output {
-      leaf response {
-        type string;
-        description "none";
-      }
-    }
-  }
-  rpc configuration-phy-cell-id {
-    description "none";
-    input {
-      uses configuration-phy-cell-id-request;
-    }
-    output {
-      uses configuration-phy-cell-id-response;
-    }
-  }
-
-  grouping configuration-phy-cell-id-request {
-    leaf fap-service-number-of-entries {
-      type uint64;
-      description "none";
-    }
-    list fap-service {
-      key "alias";
-      leaf alias {
-        type string {
-          length "1..64";
-        }
-        description "none";
-      }
-      leaf cid {
-        type string {
-          length "0..52";
-        }
-        description "none";
-      }
-      leaf phy-cell-id-in-use {
-        type uint64;
-        default "0";
-        description "none";
-      }
-      leaf pnf-name {
-        type string {
-          length "0..256";
-        }
+    revision 2019-01-19 {
         description
-          "PNF name ";
-      }
-      description "none";
+          "Formal updates including renaming the module.";
+        reference
+          "O-RAN TR ???: A YANG Data Model for Radio Access Networks.
+           ONF TR 512: Common Information Model (CoreModel).
+           BBF TR-196 2.0.3 full";
     }
-    description "none";
-  }
-
-  grouping configuration-phy-cell-id-response {
-    leaf response-code {
-      type string;
-      description "none";
-    }
-    leaf response-message {
-      type string;
-      description "none";
-    }
-    description "none";
-  }
-
-  container radio-access {
-    notification nbrlist-change-notification {
-      description
-        "RAN Neighbor List change notification.";
-      leaf fap-service-number-of-entries-changed {
-        type uint64;
+    revision 2018-11-27 {
         description
-          "Number of cells for which neighbor list has changed";
-      }
-      list fap-service {
-        key "alias";
-        leaf alias {
-          type string {
-            length "1..64";
-          }
-         description "none";
-        }
-        leaf cid {
-          type string {
-            length "0..52";
-          }
-          description "none";
-        }
-        leaf lte-cell-number-of-entries {
-          type uint64;
-          description
-            "Number of cells in a neighbor list that was changed";
-        }
-        list lte-ran-neighbor-list-in-use-lte-cell-changed {
-          key "plmnid cid";
-          uses lte-ran-neighbor-list-in-use-lte-cell-g;
-          description
-            "Changed/Modified List of cells in a neighbor list for this fap service";
-        }
-        description "none";
-      }
+          "Updated and to be used only for ONAP PCI Optimization PoC 2018-09-20
+           Incorporated container for fap-service and added pnf-name leaf node
+           For respective nodes, changed min-elements from 1 to 0 make them 
+           optional";
+        reference
+          "ONF TR ???: A YANG Data Model for Radio Access Networks.
+           BBF TR-196 2.0.3 full";
     }
-    leaf fap-service-number-of-entries {
-      type uint64;
-      description
-        "{{numentries}}";
-      reference "BBF TR-196 2.0.3 full - FAPServiceNumberOfEntries";
-    }
-    list fap-service {
-      key "alias";
-      leaf alias {
-        type string {
-          length "1..64";
-        }
-        description "none";
-      }
-      leaf cid {
-        type string {
-          length "0..52";
-        }
-        description "none";
-      }
-      leaf phy-cell-id-in-use {
-        type uint64;
-        default "0";
-        description "none";
-      }
-      leaf pnf-name {
-        type string {
-          length "0..256";
-        }
+    revision 2018-04-08 {
         description
-          "PNF name ";
-      }
-      container cell-config {
-        container lte {
-          container lte-ran {
-            description
-              "Container for object class FAPService.{i}.CellConfig.LTE.RAN.";
-            container lte-ran-neighbor-list-in-use {
-              uses lte-ran-neighbor-list-in-use-g;
-              description
-                "Container for object class FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.";
-              list lte-ran-neighbor-list-in-use-lte-cell {
-                key "plmnid cid";
-                uses lte-ran-neighbor-list-in-use-lte-cell-g;
+          "Initial version, used only for ONAP PoC 2018-06-25";
+        reference
+          "ONF TR ???: A YANG Data Model for Radio Access Networks.
+           BBF TR-196 2.0.3 full";
+    }
+
+    rpc greeting {
+        description
+          "none";
+        input {
+            leaf salutation {
+                type string;
                 description
-                  "List of object class FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.LTECell.{i}.";
-              }
+                  "none";
             }
-          }
-          description "none";
         }
-        description "none";
-      }
-      description "none";
+        output {
+            leaf response {
+                type string;
+                description
+                  "none";
+            }
+        }
+    }
+    rpc configuration-phy-cell-id {
+        description
+          "none";
+        input {
+            uses configuration-phy-cell-id-request;
+        }
+        output {
+            uses configuration-phy-cell-id-response;
+        }
     }
 
-    grouping lte-ran-neighbor-list-in-use-g {
-      description
-        "This object contains parameters relating to the neighbor list used by the FAP based on its self-configuration capability and {{object|.CellConfig.LTE.RAN.NeighborList.}} configuration of adding and excluding cells.";
-      leaf max-lte-cell-entries {
-        type uint64;
+    grouping configuration-phy-cell-id-request {
+        leaf fap-service-number-of-entries {
+            type uint64;
+            description
+              "none";
+        }
+        list fap-service {
+            key "alias";
+            leaf alias {
+                type string {
+                    length "1..64";
+                }
+                description
+                  "none";
+            }
+            leaf cid {
+                type string {
+                    length "0..52";
+                }
+                description
+                  "none";
+            }
+            leaf phy-cell-id-in-use {
+                type uint64;
+                default "0";
+                description
+                  "none";
+            }
+            leaf pnf-name {
+                type string {
+                    length "0..256";
+                }
+                description
+                  "PNF name ";
+            }
+            description
+              "none";
+        }
         description
-          "The maximum number of entries in the {{object|.CellConfig.LTE.RAN.NeighborListInUse.LTECell.{i}.}} table.";
-        reference "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.MaxLTECellEntries";
-      }
-      leaf lte-cell-number-of-entries {
-        type uint64;
-        description
-          "{{numentries}}";
-        reference "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.LTECellNumberOfEntries";
-      }
-      reference "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.";
+          "none";
     }
 
-    grouping lte-ran-neighbor-list-in-use-lte-cell-g {
-      description
-        "Table containing the LTE EUTRA (i.e. intra-RAT) cell list.";
-      leaf plmnid {
-        type string {
-          length "0..6";
+    grouping configuration-phy-cell-id-response {
+        leaf response-code {
+            type string;
+            description
+              "none";
+        }
+        leaf response-message {
+            type string;
+            description
+              "none";
         }
         description
-          "PLMN ID consists of Mobile Country Code (MCC) and Mobile Network Code (MNC) {{bibref|3GPP-TS.23.003}}, {{bibref|3GPP-TS.24.008}}. Mobile Country Code consists of three digits and uniquely identifies the country of domicile of the subscriber. Mobile Network Code consists of two or three digits and identifies the Home PLMN within a country. For a 2-digit MNC the total string length of {{param}} is 5.";
-        reference "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.LTECell.{i}.PLMNID";
-      }
-      leaf cid {
-        type string {
-          length "0..52";
-        }
-        description
-          "Cell Identity. {{bibref|3GPP-TS.36.331|Section 6.3.4}}. Combination of {{param|PLMNID}} and {{param}} constitutes the Cell Global ID (CGI).";
-        reference "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.LTECell.{i}.CID";
-      }
-      leaf phy-cell-id {
-        type uint64 {
-          range "0..503";
-        }
-        description
-          "Physical cell ID, as specified in {{bibref|3GPP-TS.36.211|Section 6.11}}.";
-        reference "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.LTECell.{i}.PhyCellID";
-      }
-      leaf pnf-name {
-        type string {
-          length "0..256";
-        }
-        description
-          "PNF name ";
-      }
+          "none";
     }
-    description "none";
-  }
+
+    container radio-access {
+        notification nbrlist-change-notification {
+            description
+              "RAN Neighbor List change notification.";
+            leaf fap-service-number-of-entries-changed {
+                type uint64;
+                description
+                  "Number of cells for which neighbor list has changed";
+            }
+            list fap-service {
+                key "alias";
+                leaf alias {
+                    type string {
+                        length "1..64";
+                    }
+                    description
+                      "none";
+                }
+                leaf cid {
+                    type string {
+                        length "0..52";
+                    }
+                    description
+                      "none";
+                }
+                leaf lte-cell-number-of-entries {
+                    type uint64;
+                    description
+                      "Number of cells in a neighbor list that was changed";
+                }
+                list lte-ran-neighbor-list-in-use-lte-cell-changed {
+                    key "plmnid cid";
+                    uses lte-ran-neighbor-list-in-use-lte-cell-g;
+                    description
+                      "Changed/Modified List of cells in a neighbor list for this fap service";
+                }
+                description
+                  "none";
+            }
+        }
+        leaf fap-service-number-of-entries {
+            type uint64;
+            description
+              "{{numentries}}";
+            reference
+              "BBF TR-196 2.0.3 full - FAPServiceNumberOfEntries";
+        }
+        list fap-service {
+            key "alias";
+            leaf alias {
+                type string {
+                    length "1..64";
+                }
+                description
+                  "none";
+            }
+            leaf cid {
+                type string {
+                    length "0..52";
+                }
+                description
+                  "none";
+            }
+            leaf phy-cell-id-in-use {
+                type uint64;
+                default "0";
+                description
+                  "none";
+            }
+            leaf pnf-name {
+                type string {
+                    length "0..256";
+                }
+                description
+                  "PNF name ";
+            }
+            container cell-config {
+                container lte {
+                    container lte-ran {
+                        description
+                          "Container for object class 
+                           FAPService.{i}.CellConfig.LTE.RAN.";
+                        container lte-ran-neighbor-list-in-use {
+                            uses lte-ran-neighbor-list-in-use-g;
+                            description
+                              "Container for object class 
+                               FAPService.{i}.CellConfig.LTE.
+                               RAN.NeighborListInUse.";
+                            list lte-ran-neighbor-list-in-use-lte-cell {
+                                key "plmnid cid";
+                                uses lte-ran-neighbor-list-in-use-lte-cell-g;
+                                description
+                                  "List of object class 
+                                   FAPService.{i}.CellConfig.LTE.RAN.
+                                   NeighborListInUse.LTECell.{i}.";
+                            }
+                        }
+                    }
+                    description
+                      "none";
+                }
+                description
+                  "none";
+            }
+            description
+              "none";
+        }
+
+        grouping lte-ran-neighbor-list-in-use-g {
+            description
+              "This object contains parameters relating to the neighbor list used by the FAP based on its self-configuration capability and {{object|.CellConfig.LTE.RAN.NeighborList.}} configuration of adding and excluding cells.";
+            leaf max-lte-cell-entries {
+                type uint64;
+                description
+                  "The maximum number of entries in the {{object|.CellConfig.LTE.RAN.NeighborListInUse.LTECell.{i}.}} table.";
+                reference
+                  "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.MaxLTECellEntries";
+            }
+            leaf lte-cell-number-of-entries {
+                type uint64;
+                description
+                  "{{numentries}}";
+                reference
+                  "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.LTECellNumberOfEntries";
+            }
+            reference
+              "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.";
+        }
+
+        grouping lte-ran-neighbor-list-in-use-lte-cell-g {
+            description
+              "Table containing the LTE EUTRA (i.e. intra-RAT) cell list.";
+            leaf plmnid {
+                type string {
+                    length "0..6";
+                }
+                description
+                  "PLMN ID consists of Mobile Country Code (MCC) and Mobile Network Code (MNC) {{bibref|3GPP-TS.23.003}}, {{bibref|3GPP-TS.24.008}}. Mobile Country Code consists of three digits and uniquely identifies the country of domicile of the subscriber. Mobile Network Code consists of two or three digits and identifies the Home PLMN within a country. For a 2-digit MNC the total string length of {{param}} is 5.";
+                reference
+                  "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.LTECell.{i}.PLMNID";
+            }
+            leaf cid {
+                type string {
+                    length "0..52";
+                }
+                description
+                  "Cell Identity. {{bibref|3GPP-TS.36.331|Section 6.3.4}}. Combination of {{param|PLMNID}} and {{param}} constitutes the Cell Global ID (CGI).";
+                reference
+                  "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.LTECell.{i}.CID";
+            }
+            leaf phy-cell-id {
+                type uint64 {
+                    range "0..503";
+                }
+                description
+                  "Physical cell ID, as specified in {{bibref|3GPP-TS.36.211|Section 6.11}}.";
+                reference
+                  "BBF TR-196 2.0.3 full - FAPService.{i}.CellConfig.LTE.RAN.NeighborListInUse.LTECell.{i}.PhyCellID";
+            }
+            leaf pnf-name {
+                type string {
+                    length "0..256";
+                }
+                description
+                  "PNF name ";
+            }
+        }
+        description
+          "none";
+    }
 }
